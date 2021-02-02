@@ -2,6 +2,7 @@
 Description=FogelBot start service
 
 [Service]
+WorkingDirectory=/home/dsingh/fogelbot
 ExecStart=/usr/bin/python3 /home/dsingh/fogelbot/main.py
 Environment=PYTHONBUFFERED=1
 Environment=FogelBotDiscordKey=nothing
