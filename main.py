@@ -3,6 +3,7 @@ import os
 from discord.ext import commands
 from requests.api import delete
 from latex import render_latex
+import random
 
 client = commands.AutoShardedBot(command_prefix= '?')
 # startup_extensions = ["Music"]
@@ -59,6 +60,18 @@ async def clear(ctx, amount=0):
       await ctx.channel.purge(limit=realNum)
     except discord.errors.Forbidden:
       await ctx.send("Bot does not have neccessary permissions to delete messages.")
+
+@client.command()
+async def quote(ctx):
+  """Send a Fogel quote"""
+  quote_template = """
+> {}
+~ Dr. Micah E. Fogel
+  """
+  with open('quotes.txt', 'rb') as file:
+    quotes = list(map(lambda x: x.strip(), file.readlines()))
+    random_index = random.randrange(len(quotes))
+    await ctx.send(quote_template.format(str(quotes[random_index].decode("utf-8"))))
 
 
 client.run(token)
