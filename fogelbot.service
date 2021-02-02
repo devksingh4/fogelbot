@@ -2,8 +2,9 @@
 Description=FogelBot start service
 
 [Service]
-ExecStart=source /home/dsingh/.bashrc && /usr/bin/python3 /home/dsingh/fogelbot/main.py
+ExecStart=/usr/bin/python3 /home/dsingh/fogelbot/main.py
 Environment=PYTHONBUFFERED=1
+Environment=FogelBotDiscordKey=nothing
 Restart=on-failure
 Type=notify
 User=dsingh
