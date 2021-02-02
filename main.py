@@ -1,7 +1,6 @@
 import discord
 import os
 from discord.ext import commands
-from requests.api import delete
 from latex import render_latex
 import random
 
