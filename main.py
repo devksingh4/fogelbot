@@ -15,7 +15,7 @@ client = commands.AutoShardedBot(command_prefix= '?')
 #       raise SystemExit('Failed to load extension {}\n{}'.format(extension, exc))
       
 
-token = os.environ['DiscordKey']
+token = os.environ['FogelBotDiscordKey']
 
 @client.event
 async def on_ready():
