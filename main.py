@@ -90,14 +90,15 @@ async def quote(ctx, num=1):
 > {}
 ~ Dr. Micah E. Fogel
   """
-  if num > 10:
-    await ctx.send("Please provide a reasonable number of quotes to fetch")
+  with open('quotes.txt', 'rb') as file:
+    quotes = list(map(lambda x: x.strip(), file.readlines()))
+  if num > len(quotes):
+    await ctx.send("There are not enough unique quotes to fufill this request.")
     return
   while num > 0:
-    with open('quotes.txt', 'rb') as file:
-      quotes = list(map(lambda x: x.strip(), file.readlines()))
-      random_index = random.randrange(len(quotes))
-      await ctx.send(quote_template.format(str(quotes[random_index].decode("utf-8"))))
+    random_index = random.randrange(len(quotes))
+    await ctx.send(quote_template.format(str(quotes[random_index].decode("utf-8"))))
+    del quotes[random_index]
     num -= 1
 
 
