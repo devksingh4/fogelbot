@@ -26,7 +26,24 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-  await client.process_commands(message)
+  try:
+    start_marker = end_marker = '$'
+    string = message.content
+    start = string.index(start_marker) + len(start_marker)
+    end = string.index(end_marker, start + 1)
+    lc = string[start:end]
+    id = render_latex(lc)
+    if id != None:
+      await message.reply(file=discord.File('{}.png'.format(id)))
+      os.remove('{}.png'.format(id)) 
+    else:
+      await message.reply('Your LaTeX could not be rendered. Please, try again.')
+      try:
+        os.remove('{}.png'.format(id)) 
+      except:
+        pass
+  except ValueError: # no latex command found
+    await client.process_commands(message)
 
 class Main_Commands():
   def __init__(self,client):
@@ -39,17 +56,21 @@ async def ping(ctx):
 @client.command()
 async def tex(ctx, latex): 
   """Render LaTeX code and reply with an image"""
+  id = ''
   async with ctx.typing():
     id = render_latex(latex)
     if id != None:
       await ctx.reply(file=discord.File('{}.png'.format(id)))
-      os.remove('{}.png'.format(id)) 
     else:
       await ctx.reply('Your LaTeX could not be rendered. Please, try again.')
-      try:
-        os.remove('{}.png'.format(id)) 
-      except:
-        pass
+
+  if id != None:
+    os.remove('{}.png'.format(id))
+  else:
+    try:
+      os.remove('{}.png'.format(id)) 
+    except:
+      pass 
 @client.command()
 async def clear(ctx, amount=0):
   if (amount == 0):
