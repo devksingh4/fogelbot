@@ -85,16 +85,18 @@ async def clear(ctx, amount=0):
       await ctx.send("Bot does not have neccessary permissions to delete messages.")
 
 @client.command()
-async def quote(ctx):
+async def quote(ctx, num=1):
   """Send a Fogel quote"""
   quote_template = """
 > {}
 ~ Dr. Micah E. Fogel
   """
-  with open('quotes.txt', 'rb') as file:
-    quotes = list(map(lambda x: x.strip(), file.readlines()))
-    random_index = random.randrange(len(quotes))
-    await ctx.send(quote_template.format(str(quotes[random_index].decode("utf-8"))))
+  while num > 0:
+    with open('quotes.txt', 'rb') as file:
+      quotes = list(map(lambda x: x.strip(), file.readlines()))
+      random_index = random.randrange(len(quotes))
+      await ctx.send(quote_template.format(str(quotes[random_index].decode("utf-8"))))
+    num -= 1
 
 
 client.run(token)
