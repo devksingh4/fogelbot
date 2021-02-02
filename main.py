@@ -91,6 +91,9 @@ async def quote(ctx, num=1):
 > {}
 ~ Dr. Micah E. Fogel
   """
+  if num > 10:
+    await ctx.send("Please provide a reasonable number of quotes to fetch")
+    return
   while num > 0:
     with open('quotes.txt', 'rb') as file:
       quotes = list(map(lambda x: x.strip(), file.readlines()))
