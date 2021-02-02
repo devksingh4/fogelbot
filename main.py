@@ -27,21 +27,23 @@ async def on_ready():
 @client.event
 async def on_message(message):
   try:
-    start_marker = end_marker = '$'
+    start_marker = end_marker = '$$'
     string = message.content
     start = string.index(start_marker) + len(start_marker)
     end = string.index(end_marker, start + 1)
     lc = string[start:end]
-    id = render_latex(lc)
-    if id != None:
-      await message.reply(file=discord.File('{}.png'.format(id)))
-      os.remove('{}.png'.format(id)) 
-    else:
-      await message.reply('Your LaTeX could not be rendered. Please, try again.')
-      try:
-        os.remove('{}.png'.format(id)) 
-      except:
-        pass
+    if lc:
+      async with message.channel.typing():
+        id = render_latex(lc)
+        if id != None:
+          await message.reply(file=discord.File('{}.png'.format(id)))
+          os.remove('{}.png'.format(id)) 
+        else:
+          await message.reply('Your LaTeX could not be rendered. Please, try again.')
+          try:
+            os.remove('{}.png'.format(id)) 
+          except:
+            pass
   except ValueError: # no latex command found
     await client.process_commands(message)
 
