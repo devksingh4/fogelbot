@@ -20,7 +20,7 @@ token = os.environ['FogelBotDiscordKey']
 @client.event
 async def on_ready():
   print('Logged in as: ' + str(client.user.name) + ' ' + str(client.user.id))
-  activity = discord.Game(name='?help')
+  activity = discord.Game(name='silently judging Hatikvah | ?help')
   await client.change_presence(activity=activity)
 
 @client.event
