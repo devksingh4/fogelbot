@@ -107,10 +107,11 @@ async def mathbio(ctx):
   """Send a biography about a famous mathematician"""
   bio_template = """
 ***{}***
-**Born** {}, {}
-**Died** {}, {}
+**Born:** {} ({})
+**Died:** {} ({})
 
 **Summary:** {}
+
 **Read more:** {}
   """
   files = os.listdir('bios')
