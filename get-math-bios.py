@@ -27,8 +27,6 @@ for item in data:
         app_json = json.dumps(ourDict)
         with open(name, 'w+') as f:
             f.write(app_json)
-        print(app_json)
+        print('processed ' + realName)
     except:
-        print('skipped one')
-
-    
+        print('skipped one')    

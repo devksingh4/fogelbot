@@ -1,10 +1,1 @@
-{
-    "name": "Pythagoras of Samos",
-    "born": "about 570 BC",
-    "born_place": "Samos, Ionia",
-    "died": "about 490 BC",
-    "died_place": "location unknown",
-    "summary": "Pythagoras was a Greek philosopher who made important developments in mathematics, astronomy, and the theory of music. The theorem now known as Pythagoras's theorem was known to the Babylonians 1000 years earlier but he may have been the first to prove it.",
-    "link": "https://mathshistory.st-andrews.ac.uk/Biographies/Pythagoras/"
-  }
-  
+{"name": "Pythagoras of Samos", "born": "about 570 BC", "born_place": "Samos, Ionia", "died": "about 490 BC", "died_place": "", "summary": "Pythagoras was a Greek philosopher who made important developments in mathematics, astronomy, and the theory of music. The theorem now known as Pythagoras's theorem was known to the Babylonians 1000 years earlier but he may have been the first to prove it.", "link": "https://mathshistory.st-andrews.ac.uk/Biographies/Pythagoras/"}
