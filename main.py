@@ -118,6 +118,6 @@ async def mathbio(ctx):
   random_index = random.randrange(len(files))
   with open(files[random_index]) as f:
     data = json.load(f)
-    await ctx.send(bio_template.format(data["name"], data["born"], data["born_place"], data["died"], data["died_place"], data["summary"], data["link"])
+    await ctx.send(bio_template.format(data["name"], data["born"], data["born_place"], data["died"], data["died_place"], data["summary"], data["link"]))
 
 client.run(token)
