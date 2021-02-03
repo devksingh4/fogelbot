@@ -116,7 +116,7 @@ async def mathbio(ctx):
   files = os.listdir('bios')
   print(files)
   random_index = random.randrange(len(files))
-  with open('bios/'.format(files[random_index])) as f:
+  with open('bios/{}'.format(files[random_index])) as f:
     data = json.load(f)
     await ctx.send(bio_template.format(data["name"], data["born"], data["born_place"], data["died"], data["died_place"], data["summary"], data["link"]))
 
