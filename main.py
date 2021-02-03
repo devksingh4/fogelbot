@@ -7,7 +7,7 @@ import json
 import praw
 from discord.ext.tasks import loop
 
-client = commands.AutoShardedBot(command_prefix='?')
+client = commands.AutoShardedBot(command_prefix='!')
 # startup_extensions = ["Music"]
 # if __name__ == "__main__":
 #   for extension in startup_extensions:
