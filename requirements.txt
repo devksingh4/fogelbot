@@ -1,2 +1,3 @@
 discord
 bs4
+praw

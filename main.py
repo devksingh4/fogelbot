@@ -3,9 +3,11 @@ import os
 from discord.ext import commands
 from latex import render_latex
 import random
-import json 
+import json
+import praw
+from discord.ext.tasks import loop
 
-client = commands.AutoShardedBot(command_prefix= '?')
+client = commands.AutoShardedBot(command_prefix='?')
 # startup_extensions = ["Music"]
 # if __name__ == "__main__":
 #   for extension in startup_extensions:
@@ -14,15 +16,48 @@ client = commands.AutoShardedBot(command_prefix= '?')
 #     except Exception as e:
 #       exc = '{}: {}'.format(type(e).__name__, e)
 #       raise SystemExit('Failed to load extension {}\n{}'.format(extension, exc))
-      
+
 
 token = os.environ['FogelBotDiscordKey']
+reddit_token = os.environ['RedditKey']
+
+
+reddit = praw.Reddit(client_id='ZOkK-ZCFJpcWCQ', client_secret=reddit_token,
+                     user_agent='FogelBot by AsyncSGD', username='androstudios')
+
+
+def createRandomSortedList(num, start=1, end=50):
+  arr = []
+  tmp = random.randint(start, end)
+
+  for _ in range(num):
+      while tmp in arr:
+          tmp = random.randint(start, end)
+      arr.append(tmp)
+
+  arr.sort()
+
+  return arr
+
+
+@loop(seconds=150)
+async def refreshCache():
+  global cache
+  global cache_funny
+  cache = [i for i in reddit.subreddit('memes').new() if not i.stickied]
+  cache_funny = [i for i in reddit.subreddit('funny').new() if not i.stickied]
+
 
 @client.event
 async def on_ready():
+  global cache
+  global cache_funny
+  cache = [i for i in reddit.subreddit('memes').new() if not i.stickied]
+  cache_funny = [i for i in reddit.subreddit('funny').new() if not i.stickied]
   print('Logged in as: ' + str(client.user.name) + ' ' + str(client.user.id))
   activity = discord.Game(name='silently judging Hatikvah | ?help')
   await client.change_presence(activity=activity)
+
 
 @client.event
 async def on_message(message):
@@ -37,26 +72,29 @@ async def on_message(message):
         id = render_latex(lc)
         if id != None:
           await message.reply(file=discord.File('{}.png'.format(id)))
-          os.remove('{}.png'.format(id)) 
+          os.remove('{}.png'.format(id))
         else:
           await message.reply('Your LaTeX could not be rendered. Please, try again.')
           try:
-            os.remove('{}.png'.format(id)) 
+            os.remove('{}.png'.format(id))
           except:
             pass
-  except ValueError: # no latex command found
+  except ValueError:  # no latex command found
     await client.process_commands(message)
 
+
 class Main_Commands():
-  def __init__(self,client):
-    self.client=client
+  def __init__(self, client):
+    self.client = client
+
 
 @client.command()
-async def ping(ctx): 
+async def ping(ctx):
   await ctx.send('Pong!')
 
+
 @client.command()
-async def tex(ctx, latex): 
+async def tex(ctx, latex):
   """Render LaTeX code and reply with an image"""
   id = ''
   async with ctx.typing():
@@ -70,9 +108,11 @@ async def tex(ctx, latex):
     os.remove('{}.png'.format(id))
   else:
     try:
-      os.remove('{}.png'.format(id)) 
+      os.remove('{}.png'.format(id))
     except:
-      pass 
+      pass
+
+
 @client.command()
 async def clear(ctx, amount=0):
   if (amount == 0):
@@ -83,6 +123,7 @@ async def clear(ctx, amount=0):
       await ctx.channel.purge(limit=realNum)
     except discord.errors.Forbidden:
       await ctx.send("Bot does not have neccessary permissions to delete messages.")
+
 
 @client.command()
 async def quote(ctx, num=1):
@@ -102,6 +143,7 @@ async def quote(ctx, num=1):
     del quotes[random_index]
     num -= 1
 
+
 @client.command()
 async def mathbio(ctx):
   """Send a biography about a famous mathematician"""
@@ -120,4 +162,45 @@ async def mathbio(ctx):
     data = json.load(f)
     await ctx.send(bio_template.format(data["name"], data["born"], data["born_place"], data["died"], data["died_place"], data["summary"], data["link"]))
 
+
+@client.command()
+async def meme(ctx, numMemes=1):
+  """Sends a number of memes to a channel."""
+  try:
+    if (int(numMemes) > 20 or int(numMemes) < 1):
+      await ctx.send("Please provide a reasonable number of memes.")
+      return
+  except:
+    await ctx.send("Please provide a reasonable number of memes.")
+    return
+  x = int(numMemes)
+  randomlist = createRandomSortedList(x)
+  for i in randomlist:
+    selectedpost = cache[i]
+    if "i.redd.it" in selectedpost.url or 'imgur' in selectedpost.url:
+      await ctx.send("Here is a meme from r/memes: https://reddit.com{}".format(selectedpost.permalink), embed=discord.Embed(title=selectedpost.title).set_image(url=selectedpost.url))
+    else:
+      await ctx.send("Here is a meme from r/memes: {} \n\n*This post is a video. Please click on the link to see the full video*".format(selectedpost.url))
+
+
+@client.command()
+async def funny(ctx, numMemes=1):
+  """Sends a number of memes to a channel."""
+  try:
+    if (int(numMemes) > 5 or int(numMemes) < 1):
+      await ctx.send("Please provide a reasonable number of posts to retrieve from r/funny.")
+      return
+  except:
+    await ctx.send("Please provide a reasonable number of posts to retrieve from r/funny.")
+    return
+  x = int(numMemes)
+  randomlist = createRandomSortedList(x)
+  for i in randomlist:
+    selectedpost = cache_funny[i]
+    if "i.redd.it" in selectedpost.url or 'imgur' in selectedpost.url:
+      await ctx.send("Here is a post from r/funny: https://reddit.com{}".format(selectedpost.permalink), embed=discord.Embed(title=selectedpost.title).set_image(url=selectedpost.url))
+    else:
+      await ctx.send("Here is a post from r/funny: https://reddit.com{} \n\n *This post is a video. Please click on the link to see the full video*".format(selectedpost.permalink))
+
+refreshCache.start()
 client.run(token)
