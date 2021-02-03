@@ -167,7 +167,7 @@ async def mathbio(ctx):
 async def meme(ctx, numMemes=1):
   """Sends a number of memes to a channel."""
   try:
-    if (int(numMemes) > 20 or int(numMemes) < 1):
+    if (int(numMemes) > 5 or int(numMemes) < 1):
       await ctx.send("Please provide a reasonable number of memes.")
       return
   except:
