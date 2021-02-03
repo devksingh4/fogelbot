@@ -114,7 +114,6 @@ async def mathbio(ctx):
 **Read more:** {}
   """
   files = os.listdir('bios')
-  print(files)
   random_index = random.randrange(len(files))
   with open('bios/{}'.format(files[random_index])) as f:
     data = json.load(f)
