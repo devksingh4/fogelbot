@@ -3,6 +3,7 @@ import os
 from discord.ext import commands
 from latex import render_latex
 import random
+import json 
 
 client = commands.AutoShardedBot(command_prefix= '?')
 # startup_extensions = ["Music"]
@@ -101,5 +102,22 @@ async def quote(ctx, num=1):
     del quotes[random_index]
     num -= 1
 
+@client.command()
+async def mathbio(ctx):
+  """Send a biography about a famous mathematician"""
+  bio_template = """
+***{}***
+**Born** {}, {}
+**Died** {}, {}
+
+**Summary:** {}
+**Read more:** {}
+  """
+  files = os.listdir('bios')
+  print(files)
+  random_index = random.randrange(len(files))
+  with open(files[random_index]) as f:
+    data = json.load(f)
+    await ctx.send(bio_template.format(data["name"], data["born"], data["born_place"], data["died"], data["died_place"], data["summary"], data["link"])
 
 client.run(token)
