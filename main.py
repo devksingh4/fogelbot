@@ -40,12 +40,15 @@ def createRandomSortedList(num, start=1, end=50):
   return arr
 
 
+def checkPost(i):
+  return (i.stickied or i.over_18)
+
 @loop(seconds=150)
 async def refreshCache():
   global cache
   global cache_funny
-  cache = [i for i in reddit.subreddit('memes').new() if not i.stickied]
-  cache_funny = [i for i in reddit.subreddit('funny').new() if not i.stickied]
+  cache = [i for i in reddit.subreddit('memes').new() if not checkPost(i) ]
+  cache_funny = [i for i in reddit.subreddit('funny').new() if not checkPost(i)]
 
 
 @client.event
