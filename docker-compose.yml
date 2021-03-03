@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: --interval 10 fogelbot
+  fogelbot:
+    container_name: fogelbot
+    image: devksingh4/fogelbot:latest
+    restart: always
+    environment:
+      - DISCORD_TOKEN
+      - PREFIX=!
+      - ACTIVITY=silently judging Hatikvah | !help
+    volumes:
+      - ./saved/:/usr/src/app/commands/music/saved

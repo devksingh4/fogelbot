@@ -7,19 +7,10 @@ import json
 import praw
 from discord.ext.tasks import loop
 
-client = commands.AutoShardedBot(command_prefix='!')
-# startup_extensions = ["Music"]
-# if __name__ == "__main__":
-#   for extension in startup_extensions:
-#     try:
-#       client.load_extension(extension)
-#     except Exception as e:
-#       exc = '{}: {}'.format(type(e).__name__, e)
-#       raise SystemExit('Failed to load extension {}\n{}'.format(extension, exc))
+client = commands.AutoShardedBot(command_prefix=os.environ['PREFIX'])
 
-
-token = os.environ['FogelBotDiscordKey']
-reddit_token = os.environ['RedditKey']
+token = os.environ['DISCORD_TOKEN']
+reddit_token = os.environ['REDDIT_TOKEN']
 
 
 reddit = praw.Reddit(client_id='ZOkK-ZCFJpcWCQ', client_secret=reddit_token,
@@ -58,7 +49,7 @@ async def on_ready():
   cache = [i for i in reddit.subreddit('memes').new() if not i.stickied]
   cache_funny = [i for i in reddit.subreddit('funny').new() if not i.stickied]
   print('Logged in as: ' + str(client.user.name) + ' ' + str(client.user.id))
-  activity = discord.Game(name='silently judging Hatikvah | !help')
+  activity = discord.Game(name=os.environ['ACTIVITY'])
   await client.change_presence(activity=activity)
 
 
