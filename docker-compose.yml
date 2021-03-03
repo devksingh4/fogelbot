@@ -13,6 +13,7 @@ services:
     restart: always
     environment:
       - DISCORD_TOKEN
+      - REDDIT_TOKEN
       - PREFIX=!
       - ACTIVITY=silently judging Hatikvah | !help
     volumes:
