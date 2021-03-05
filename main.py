@@ -138,7 +138,7 @@ async def quote(ctx, num=1):
     num -= 1
 
 
-@client.command()
+@client.command(aliases=['bio'])
 async def mathbio(ctx):
   """Send a biography about a famous mathematician"""
   bio_template = """
