@@ -64,16 +64,15 @@ async def on_message(message):
     if lc:
       async with message.channel.typing():
         cleaned = message.content.replace("$$", "")
-        id = render_latex(f"$${cleaned}$$")
+        id = render_latex(cleaned)
         if id != None:
           await message.reply(file=discord.File('{}.png'.format(id)))
-          os.remove('{}.png'.format(id))
         else:
           await message.reply('Your LaTeX could not be rendered. Please, try again.')
-          try:
-            os.remove('{}.png'.format(id))
-          except:
-            pass
+      try:
+        os.remove('{}.png'.format(id))
+      except:
+        pass
   except ValueError:  # no latex command found
     await client.process_commands(message)
 
