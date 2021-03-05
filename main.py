@@ -63,7 +63,8 @@ async def on_message(message):
     lc = string[start:end]
     if lc:
       async with message.channel.typing():
-        id = render_latex(lc)
+        cleaned = message.content.replace("$$", "")
+        id = render_latex(f"$${cleaned}$$")
         if id != None:
           await message.reply(file=discord.File('{}.png'.format(id)))
           os.remove('{}.png'.format(id))
