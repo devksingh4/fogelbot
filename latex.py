@@ -30,4 +30,22 @@ def render_latex(latex):
         with open('{}.png'.format(id), 'wb') as out_file:
             shutil.copyfileobj(response.raw, out_file)
         return id
+
+def extract_inline_tex(content):
+	parts = iter(content.split('$$'))
+	latex = ''
+	try:
+		while True:
+			word = "\\text{" + next(parts) + "}"
+			if word != '':
+				latex += word.replace('#', '\\#') \
+						     .replace('$', '\\$') \
+						     .replace('%', '\\%')
+				latex += ' '
+			word = next(parts)
+			if word != '':
+				latex += word.strip('`')
+	except StopIteration:
+		pass
+	return latex.rstrip()
     

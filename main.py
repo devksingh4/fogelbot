@@ -1,7 +1,7 @@
 import discord
 import os
 from discord.ext import commands
-from latex import render_latex
+from latex import render_latex, extract_inline_tex
 import random
 import json
 import praw
@@ -63,8 +63,7 @@ async def on_message(message):
     lc = string[start:end]
     if lc:
       async with message.channel.typing():
-        cleaned = message.content.replace("$$", "")
-        id = render_latex(cleaned)
+        id = render_latex(extract_inline_tex(message.content))
         if id != None:
           await message.reply(file=discord.File('{}.png'.format(id)))
         else:
