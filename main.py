@@ -178,6 +178,15 @@ async def meme(ctx, numMemes=1):
     else:
       await ctx.send("Here is a meme from r/memes: {} \n\n*This post is a video. Please click on the link to see the full video*".format(selectedpost.url))
     del cache[i]
+  
+@client.command()
+async def clap(ctx, *, message):
+  """Create messages with spaces replaced with claps"""
+  try:
+    await ctx.send(" 👏 " + message.replace(" ", " 👏 ") + " 👏 ")
+  except:
+    await ctx.send("Please provide a valid message to clap-ify!")
+    
 
 
 @client.command()
