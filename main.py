@@ -63,7 +63,8 @@ async def on_message(message):
     lc = string[start:end]
     if lc:
       async with message.channel.typing():
-        id = render_latex(extract_inline_tex(message.content))
+        et = extract_inline_tex(message.content)
+        id = render_latex(et)
         if id != None:
           await message.reply(file=discord.File('{}.png'.format(id)))
         else:

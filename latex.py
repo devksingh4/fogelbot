@@ -6,11 +6,11 @@ import re
 HOST = 'https://rtex.probablyaweb.site'
 
 def load_template():
-	with open('template.tex', encoding = 'utf-8') as f:
-		raw = f.read()
-	# Remove any comments from the template
-	cleaned = re.sub(r'%.*\n', '', raw)
-	return cleaned
+    with open('template.tex', encoding = 'utf-8') as f:
+        raw = f.read()
+    # Remove any comments from the template
+    cleaned = re.sub(r'%.*\n', '', raw)
+    return cleaned
 
 
 def render_latex(latex):
@@ -32,20 +32,24 @@ def render_latex(latex):
         return id
 
 def extract_inline_tex(content):
-	parts = iter(content.split('$$'))
-	latex = ''
-	try:
-		while True:
-			word = "\\text{" + next(parts) + "}"
-			if word != '':
-				latex += word.replace('#', '\\#') \
-						     .replace('$', '\\$') \
-						     .replace('%', '\\%')
-				latex += ' '
-			word = next(parts)
-			if word != '':
-				latex += word.strip('`')
-	except StopIteration:
-		pass
-	return latex.rstrip()
+    parts = iter(content.split('$$'))
+    latex = ''
+    try:
+        while True:
+            it = next(parts)
+            if (it == ''): 
+                word = ''
+            else:
+                word = " \\text{" + it + "} "
+            if word != '':
+                latex += word.replace('#', '\\#') \
+                             .replace('$', '\\$') \
+                             .replace('%', '\\%')
+                latex += ' '
+            word = next(parts)
+            if word != '':
+                latex += word.strip('`')
+    except StopIteration:
+        pass
+    return latex.rstrip()
     
