@@ -1,6 +1,7 @@
 import discord
 import os
 from discord.ext import commands
+from discord import Intents
 from latex import render_latex, extract_inline_tex
 import random
 import requests
@@ -8,7 +9,7 @@ import json
 import praw
 from discord.ext.tasks import loop
 
-client = commands.AutoShardedBot(command_prefix=os.environ['PREFIX'])
+client = commands.AutoShardedBot(command_prefix=os.environ['PREFIX'],intents=Intents.all())
 
 token = os.environ['DISCORD_TOKEN']
 reddit_token = os.environ['REDDIT_TOKEN']
