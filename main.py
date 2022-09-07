@@ -158,7 +158,7 @@ async def quote(ctx, num=1):
     return
   while num > 0:
     random_index = random.randrange(len(quotes))
-    await ctx.send(quote_template.format(str(quotes[random_index].decode("utf-8"))))
+    await ctx.send(quote_template.format(str(quotes[random_index])))
     del quotes[random_index]
     num -= 1
 
