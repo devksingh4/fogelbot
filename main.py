@@ -3,6 +3,7 @@ import os
 from discord.ext import commands
 from latex import render_latex, extract_inline_tex
 import random
+import requests
 import json
 import praw
 from discord.ext.tasks import loop
@@ -76,6 +77,28 @@ async def on_message(message):
   except ValueError:  # no latex command found
     await client.process_commands(message)
 
+@client.event
+async def on_message_edit(before, message):
+  try:
+    start_marker = end_marker = '$$'
+    string = message.content
+    start = string.index(start_marker) + len(start_marker)
+    end = string.index(end_marker, start + 1)
+    lc = string[start:end]
+    if lc:
+      async with message.channel.typing():
+        et = extract_inline_tex(message.content)
+        id = render_latex(et)
+        if id != None:
+          await message.reply(file=discord.File('{}.png'.format(id)))
+        else:
+          await message.reply('Your LaTeX could not be rendered. Please, try again.')
+      try:
+        os.remove('{}.png'.format(id))
+      except:
+        pass
+  except ValueError:  # no latex command found
+    await client.process_commands(message)
 
 class Main_Commands():
   def __init__(self, client):
@@ -126,8 +149,9 @@ async def quote(ctx, num=1):
 > {}
 ~ Dr. Micah E. Fogel
   """
-  with open('quotes.txt', 'rb') as file:
-    quotes = list(map(lambda x: x.strip(), file.readlines()))
+  r = requests.get("https://raw.githubusercontent.com/devksingh4/fogelbot/master/quotes.txt")
+  quotes = r.text.split("\n")[0:-1] # remove last split line
+  quotes = list(map(lambda x: x.strip().replace("\'", "'"), quotes))
   if num > len(quotes):
     await ctx.send("There are not enough unique quotes to fufill this request.")
     return
