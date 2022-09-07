@@ -236,5 +236,5 @@ async def funny(ctx, numMemes=1):
       await ctx.send("Here is a post from r/funny: https://reddit.com{} \n\n *This post is a video. Please click on the link to see the full video*".format(selectedpost.permalink))
     del cache_funny[i]
 
-refreshCache.start()
+# refreshCache.start()
 client.run(token)
