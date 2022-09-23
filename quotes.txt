@@ -34,3 +34,4 @@ Is the test hard? That depends -- are you good at taking tests?
 Mrs. Meng isn't related to my grandmother... as far as I know
 Why should I be nice?
 Nice just isn't in the equation.
+Fogel's Lemma: Cool things make your head hurt ==> Proof: If you stick your head in a freezer for a while, your head will hurt
